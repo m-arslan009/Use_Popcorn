@@ -16,7 +16,7 @@ header {
 
 header h2,
 header p {
-  margin: 20px;
+  margin: 15px 20px;
 }
 
 header input {
@@ -29,11 +29,11 @@ header input {
   background-color: rgba(128, 128, 128, 0.6);
   -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
-  color: white;
+  color: rgb(198, 198, 198);
 }
 
 header input::placeholder {
-  color: rgba(255, 255, 255, 1);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 header input:focus {
