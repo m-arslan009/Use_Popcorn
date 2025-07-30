@@ -10,7 +10,13 @@ export default function DisplayMovies({
   isFound,
 }) {
   const moviesList = Movies?.map((movie) => {
-    return <MovieComponent key={movie.imdbID} movie={movie} />;
+    return (
+      <MovieComponent
+        key={movie.imdbID}
+        movie={movie}
+        onClick={() => dispatch({ type: "SET_SELECTED_MOVIE", payload: movie })}
+      />
+    );
   });
 
   const handleRetry = () => {

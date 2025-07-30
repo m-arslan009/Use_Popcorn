@@ -26,6 +26,7 @@ const initialState = {
   isLoading: false,
   isError: null,
   isFound: false,
+  watchedHistory: JSON.parse(localStorage.getItem("watchedHistory")) || [],
 };
 
 function reducer(state, action) {
@@ -48,6 +49,15 @@ function reducer(state, action) {
         isError: false,
         isFound: false,
         isLoading: true,
+      };
+    case "SET_SELECTED_MOVIE":
+      return { ...state, selectedMovie: action.payload };
+    case "BACK_TO_HISTORY":
+      return { ...state, selectedMovie: null };
+    case "ADD_TO_WATCHED_HISTORY":
+      return {
+        ...state,
+        watchedHistory: [...state.watchedHistory, action.payload],
       };
     default:
       throw new Error(`Unhandled action type: ${action.type}`);

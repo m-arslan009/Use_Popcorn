@@ -180,3 +180,81 @@ header input:focus {
   display: flex;
   flex-direction: column;
 }
+
+.movie-detail {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.movie-detail img {
+  width: 150px;
+  height: 200px;
+  border-radius: 10px;
+  margin-left: 10px;
+}
+
+.selected_movie-info,
+.movie-detail img {
+  margin-top: 10px;
+}
+
+.selected_movie-info {
+  text-align: left;
+}
+
+.selected_movie-info * {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 18px;
+}
+
+.selected_movie-info h2 {
+  font-size: 1.3rem;
+  color: rgb(255, 255, 255);
+}
+
+.selected_movie-info p {
+  font-size: 1rem;
+  color: rgb(198, 198, 198);
+}
+
+.back-btn {
+  position: fixed;
+  background-color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 5px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.history-header {
+  background-color: rgb(134, 134, 134);
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  text-align: left;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.history-header * {
+  margin: 0;
+  padding: 0;
+}
+
+.history-header h2 {
+  color: white;
+  margin: 0;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.history-header div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  font-size: 15px;
+}

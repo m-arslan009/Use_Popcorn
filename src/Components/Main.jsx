@@ -1,4 +1,6 @@
 import DisplayMovies from "./DisplayMovies";
+import MovieDetail from "./MovieDetail";
+import History from "./History";
 
 export default function Main({
   dispatch,
@@ -17,7 +19,12 @@ export default function Main({
         isError={isError}
         isFound={isFound}
       />
-      <h1>Movie Detail</h1>
+      <div style={{ backgroundColor: "rgb(98, 98, 98)", borderRadius: "10px" }}>
+        {!selectedMovie && <History />}
+        {selectedMovie && (
+          <MovieDetail selectedMovie={selectedMovie} dispatch={dispatch} />
+        )}
+      </div>
     </div>
   );
 }
