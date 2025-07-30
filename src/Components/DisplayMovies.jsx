@@ -13,12 +13,9 @@ export default function DisplayMovies({
     return <MovieComponent key={movie.imdbID} movie={movie} />;
   });
 
-  // Handle retry function for errors
   const handleRetry = () => {
-    // Trigger a new search by dispatching the current search query
     dispatch({ type: "SET_ERROR", payload: false });
     dispatch({ type: "SET_NOT_FOUND", payload: false });
-    // You might want to add a refresh action here
   };
 
   return (

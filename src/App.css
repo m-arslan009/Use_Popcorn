@@ -104,7 +104,6 @@ header input:focus {
 .movie-info p {
   font-size: 0.9rem;
   color: rgb(198, 198, 198);
-  font-weight: bold;
 }
 
 .error {

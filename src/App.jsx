@@ -95,6 +95,7 @@ function App() {
             dispatch({ type: "SET_ERROR", payload: true });
           }
         } else {
+          console.log(data);
           dispatch({ type: "SET_MOVIES", payload: data.Search });
         }
       } catch (error) {
