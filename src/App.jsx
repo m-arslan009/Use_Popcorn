@@ -26,6 +26,7 @@ const initialState = {
   isLoading: false,
   isError: null,
   isFound: false,
+  isAdded: false,
   watchedHistory: JSON.parse(localStorage.getItem("watchedHistory")) || [],
 };
 
@@ -57,6 +58,7 @@ function reducer(state, action) {
     case "ADD_TO_WATCHED_HISTORY":
       return {
         ...state,
+        selectedMovie: null,
         watchedHistory: [...state.watchedHistory, action.payload],
       };
     default:
@@ -123,6 +125,8 @@ function App() {
       controller.abort();
     };
   }, [searchQuery]);
+
+  useEffect(() => {});
 
   return (
     <>
