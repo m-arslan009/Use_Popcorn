@@ -1,7 +1,6 @@
 import MovieComponent from "./MovieComponent";
 
 export default function History({ watchedHistory, dispatch }) {
-  // Ensure watchedHistory is an array and has valid data
   const validWatchedHistory = Array.isArray(watchedHistory)
     ? watchedHistory
     : [];
@@ -19,10 +18,8 @@ export default function History({ watchedHistory, dispatch }) {
     );
   });
 
-  // Calculate statistics
   const totalMovies = validWatchedHistory.length;
   const totalRuntime = validWatchedHistory.reduce((acc, movie) => {
-    // Assuming runtime is in minutes, or default to 120 minutes if not available
     const runtime = movie.runtime || movie.Runtime || 120;
     return acc + (typeof runtime === "string" ? parseInt(runtime) : runtime);
   }, 0);

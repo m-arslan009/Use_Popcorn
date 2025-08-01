@@ -183,7 +183,6 @@ header input:focus {
   flex-direction: column;
 }
 
-/* History Component Styles */
 .history-detail {
   padding: 20px;
   color: white;

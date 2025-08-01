@@ -4,12 +4,11 @@ import Rating from "./Rating";
 export default function MovieDetail({ selectedMovie, dispatch }) {
   const [rating, setRating] = useState(0);
 
-  function handleRatingChange(newRating) {
+  const handleRatingChange = (newRating) => {
     setRating(newRating);
-  }
+  };
 
-  function handleAddMovie() {
-    document.title = `🍿 USEPOPCORN`;
+  const handleAddMovie = () => {
     if (rating === 0) {
       alert("Please rate the movie before adding to your watched history!");
       return;
@@ -22,28 +21,27 @@ export default function MovieDetail({ selectedMovie, dispatch }) {
       id: selectedMovie.imdbID || selectedMovie.id || Date.now().toString(),
     };
 
-    alert("Movie added to watched history!");
     dispatch({ type: "ADD_TO_WATCHED_HISTORY", payload: movieWithRating });
-  }
+  };
 
-  function handleBack() {
-    document.title = `🍿 USEPOPCORN`;
+  const handleBack = () => {
     dispatch({ type: "BACK_TO_HISTORY" });
-  }
+  };
+
+  const posterSrc =
+    selectedMovie.Poster !== "N/A" && selectedMovie.Poster.startsWith("http")
+      ? selectedMovie.Poster
+      : "https://static.thenounproject.com/png/5018320-200.png";
 
   return (
     <>
       <div className="movie-detail">
-        <button className="back-btn" onClick={handleBack}>{`⬅`}</button>
-        <img
-          src={
-            selectedMovie.Poster !== "N/A" &&
-            selectedMovie.Poster.startsWith("http")
-              ? selectedMovie.Poster
-              : "https://static.thenounproject.com/png/5018320-200.png"
-          }
-          alt={selectedMovie.Title}
-        />
+        <button className="back-btn" onClick={handleBack}>
+          ⬅
+        </button>
+
+        <img src={posterSrc} alt={selectedMovie.Title} />
+
         <div className="selected_movie-info">
           <h2>{selectedMovie.Title}</h2>
           <p>Release In: {selectedMovie.Year.slice(0, 4)}</p>
@@ -51,13 +49,14 @@ export default function MovieDetail({ selectedMovie, dispatch }) {
           <p>Your Rating: {rating || 0}</p>
         </div>
       </div>
+
       <div className="rating-container">
         <Rating rating={rating} onMovieRating={handleRatingChange} />
-        {rating ? (
+        {rating > 0 && (
           <button className="add-btn" onClick={handleAddMovie}>
             Add to Watched History
           </button>
-        ) : null}
+        )}
       </div>
     </>
   );

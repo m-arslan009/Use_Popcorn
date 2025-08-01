@@ -25,7 +25,6 @@ const initialState = {
   isLoading: false,
   isError: null,
   isFound: false,
-  isAdded: false,
   watchedHistory: (() => {
     try {
       const stored = localStorage.getItem("watchedHistory");
@@ -38,7 +37,6 @@ const initialState = {
 };
 
 function reducer(state, action) {
-  // Ensure watchedHistory is always an array in the state
   const safeState = {
     ...state,
     watchedHistory: Array.isArray(state.watchedHistory)
@@ -49,8 +47,6 @@ function reducer(state, action) {
   switch (action.type) {
     case "SET_MOVIES":
       return { ...safeState, movies: action.payload };
-    case "SELECT_MOVIE":
-      return { ...safeState, selectedMovie: action.payload };
     case "SET_SEARCH_QUERY":
       return { ...safeState, searchQuery: action.payload };
     case "SET_LOADING":
@@ -59,27 +55,17 @@ function reducer(state, action) {
       return { ...safeState, isError: action.payload };
     case "SET_NOT_FOUND":
       return { ...safeState, isFound: action.payload };
-    case "RETRY_FETCH":
-      return {
-        ...safeState,
-        isError: false,
-        isFound: false,
-        isLoading: true,
-      };
     case "SET_SELECTED_MOVIE":
       return { ...safeState, selectedMovie: action.payload };
     case "BACK_TO_HISTORY":
       return { ...safeState, selectedMovie: null };
     case "ADD_TO_WATCHED_HISTORY": {
-      // Ensure watchedHistory is always an array
       const currentHistory = Array.isArray(safeState.watchedHistory)
         ? safeState.watchedHistory
         : [];
 
-      // Simply add the new movie without checking for duplicates
       const newWatchedHistory = [...currentHistory, action.payload];
 
-      // Update localStorage
       try {
         localStorage.setItem(
           "watchedHistory",
@@ -97,18 +83,16 @@ function reducer(state, action) {
     }
 
     case "REMOVE_FROM_HISTORY": {
-      // Ensure watchedHistory is always an array
       const currentHistory = Array.isArray(safeState.watchedHistory)
         ? safeState.watchedHistory
         : [];
-      // Filter out the movie to be removed
+
       const newWatchedHistory = currentHistory.filter(
         (movie) =>
           movie.imdbID !== action.payload.imdbID &&
           movie.id !== action.payload.id
       );
 
-      // Update localStorage
       try {
         localStorage.setItem(
           "watchedHistory",
@@ -117,6 +101,7 @@ function reducer(state, action) {
       } catch (error) {
         console.error("Error saving to localStorage:", error);
       }
+
       return {
         ...safeState,
         watchedHistory: newWatchedHistory,
@@ -145,7 +130,7 @@ function App() {
   useEffect(() => {
     const controller = new AbortController();
 
-    async function fetchMovies() {
+    const fetchMovies = async () => {
       try {
         dispatch({ type: "SET_LOADING", payload: true });
         dispatch({ type: "SET_ERROR", payload: false });
@@ -157,9 +142,7 @@ function App() {
 
         const res = await fetch(
           `https://www.omdbapi.com/?apikey=${KEY}&s=${searchTerm}`,
-          {
-            signal: controller.signal,
-          }
+          { signal: controller.signal }
         );
 
         if (!res.ok) {
@@ -186,12 +169,11 @@ function App() {
       } finally {
         dispatch({ type: "SET_LOADING", payload: false });
       }
-    }
+    };
+
     fetchMovies();
 
-    return () => {
-      controller.abort();
-    };
+    return () => controller.abort();
   }, [searchQuery]);
 
   return (
