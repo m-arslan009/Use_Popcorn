@@ -9,6 +9,7 @@ export default function Main({
   isError,
   isLoading,
   isFound,
+  watchedHistory,
 }) {
   return (
     <div className="main-container">
@@ -20,7 +21,9 @@ export default function Main({
         isFound={isFound}
       />
       <div style={{ backgroundColor: "rgb(98, 98, 98)", borderRadius: "10px" }}>
-        {!selectedMovie && <History />}
+        {!selectedMovie && (
+          <History watchedHistory={watchedHistory} dispatch={dispatch} />
+        )}
         {selectedMovie && (
           <MovieDetail selectedMovie={selectedMovie} dispatch={dispatch} />
         )}

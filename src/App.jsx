@@ -19,7 +19,6 @@ const randomMovies = [
 ];
 
 const initialState = {
-  // Define your initial state here
   movies: [],
   selectedMovie: null,
   searchQuery: "",
@@ -27,40 +26,103 @@ const initialState = {
   isError: null,
   isFound: false,
   isAdded: false,
-  watchedHistory: JSON.parse(localStorage.getItem("watchedHistory")) || [],
+  watchedHistory: (() => {
+    try {
+      const stored = localStorage.getItem("watchedHistory");
+      return stored ? JSON.parse(stored) : [];
+    } catch (error) {
+      console.error("Error parsing watchedHistory from localStorage:", error);
+      return [];
+    }
+  })(),
 };
 
 function reducer(state, action) {
+  // Ensure watchedHistory is always an array in the state
+  const safeState = {
+    ...state,
+    watchedHistory: Array.isArray(state.watchedHistory)
+      ? state.watchedHistory
+      : [],
+  };
+
   switch (action.type) {
     case "SET_MOVIES":
-      return { ...state, movies: action.payload };
+      return { ...safeState, movies: action.payload };
     case "SELECT_MOVIE":
-      return { ...state, selectedMovie: action.payload };
+      return { ...safeState, selectedMovie: action.payload };
     case "SET_SEARCH_QUERY":
-      return { ...state, searchQuery: action.payload };
+      return { ...safeState, searchQuery: action.payload };
     case "SET_LOADING":
-      return { ...state, isLoading: action.payload };
+      return { ...safeState, isLoading: action.payload };
     case "SET_ERROR":
-      return { ...state, isError: action.payload };
+      return { ...safeState, isError: action.payload };
     case "SET_NOT_FOUND":
-      return { ...state, isFound: action.payload };
+      return { ...safeState, isFound: action.payload };
     case "RETRY_FETCH":
       return {
-        ...state,
+        ...safeState,
         isError: false,
         isFound: false,
         isLoading: true,
       };
     case "SET_SELECTED_MOVIE":
-      return { ...state, selectedMovie: action.payload };
+      return { ...safeState, selectedMovie: action.payload };
     case "BACK_TO_HISTORY":
-      return { ...state, selectedMovie: null };
-    case "ADD_TO_WATCHED_HISTORY":
+      return { ...safeState, selectedMovie: null };
+    case "ADD_TO_WATCHED_HISTORY": {
+      // Ensure watchedHistory is always an array
+      const currentHistory = Array.isArray(safeState.watchedHistory)
+        ? safeState.watchedHistory
+        : [];
+
+      // Simply add the new movie without checking for duplicates
+      const newWatchedHistory = [...currentHistory, action.payload];
+
+      // Update localStorage
+      try {
+        localStorage.setItem(
+          "watchedHistory",
+          JSON.stringify(newWatchedHistory)
+        );
+      } catch (error) {
+        console.error("Error saving to localStorage:", error);
+      }
+
       return {
-        ...state,
+        ...safeState,
+        watchedHistory: newWatchedHistory,
         selectedMovie: null,
-        watchedHistory: [...state.watchedHistory, action.payload],
       };
+    }
+
+    case "REMOVE_FROM_HISTORY": {
+      // Ensure watchedHistory is always an array
+      const currentHistory = Array.isArray(safeState.watchedHistory)
+        ? safeState.watchedHistory
+        : [];
+      // Filter out the movie to be removed
+      const newWatchedHistory = currentHistory.filter(
+        (movie) =>
+          movie.imdbID !== action.payload.imdbID &&
+          movie.id !== action.payload.id
+      );
+
+      // Update localStorage
+      try {
+        localStorage.setItem(
+          "watchedHistory",
+          JSON.stringify(newWatchedHistory)
+        );
+      } catch (error) {
+        console.error("Error saving to localStorage:", error);
+      }
+      return {
+        ...safeState,
+        watchedHistory: newWatchedHistory,
+      };
+    }
+
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }
@@ -68,7 +130,15 @@ function reducer(state, action) {
 
 function App() {
   const [
-    { movies, selectedMovie, searchQuery, isLoading, isError, isFound },
+    {
+      movies,
+      selectedMovie,
+      searchQuery,
+      isLoading,
+      isError,
+      isFound,
+      watchedHistory,
+    },
     dispatch,
   ] = useReducer(reducer, initialState);
 
@@ -77,7 +147,6 @@ function App() {
 
     async function fetchMovies() {
       try {
-        // Reset states
         dispatch({ type: "SET_LOADING", payload: true });
         dispatch({ type: "SET_ERROR", payload: false });
         dispatch({ type: "SET_NOT_FOUND", payload: false });
@@ -107,7 +176,6 @@ function App() {
             dispatch({ type: "SET_ERROR", payload: true });
           }
         } else {
-          console.log(data);
           dispatch({ type: "SET_MOVIES", payload: data.Search });
         }
       } catch (error) {
@@ -126,8 +194,6 @@ function App() {
     };
   }, [searchQuery]);
 
-  useEffect(() => {});
-
   return (
     <>
       <Header
@@ -145,6 +211,7 @@ function App() {
         isLoading={isLoading}
         isError={isError}
         isFound={isFound}
+        watchedHistory={watchedHistory}
       />
     </>
   );

@@ -1,8 +1,7 @@
-export default function MovieComponent({ movie, onClick }) {
+export default function MovieComponent({ movie, onClick, isHistory = false }) {
   const isLPath = movie.Poster && movie.Poster.startsWith("http");
-  console.log(isLPath);
   return (
-    <div className="movie-component" onClick={onClick}>
+    <div className="movie-component" onClick={!isHistory && onClick}>
       <img
         src={
           isLPath
@@ -15,6 +14,11 @@ export default function MovieComponent({ movie, onClick }) {
         <h3>{movie.Title}</h3>
         <p>🕒 {movie.Year}</p>
       </div>
+      {isHistory && (
+        <button className="remove-btn" onClick={isHistory && onClick}>
+          X
+        </button>
+      )}
     </div>
   );
 }

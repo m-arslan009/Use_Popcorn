@@ -75,8 +75,9 @@ header input:focus {
   justify-self: start;
   width: 100%;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 20px;
   width: 400px;
+  position: relative;
+  padding: 20px 0px;
 }
 
 .movie-component:hover {
@@ -85,8 +86,9 @@ header input:focus {
 }
 
 .movie-component img {
-  width: 50px;
-  height: 70px;
+  width: 30px;
+  height: 50px;
+  margin-left: 20px;
 }
 
 .movie-info * {
@@ -97,7 +99,7 @@ header input:focus {
 }
 
 .movie-info h3 {
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: rgb(255, 255, 255);
 }
 
@@ -179,6 +181,47 @@ header input:focus {
 .movies-list {
   display: flex;
   flex-direction: column;
+}
+
+/* History Component Styles */
+.history-detail {
+  padding: 20px;
+  color: white;
+}
+
+.history-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.history-header h2 {
+  margin: 0 0 10px 0;
+  color: white;
+  font-size: 1.5rem;
+}
+
+.stats {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.stats p {
+  margin: 0;
+  padding: 5px 10px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  font-size: 0.9rem;
+}
+
+.watched-movies-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.watched-movies-list::-webkit-scrollbar {
+  display: none;
 }
 
 .movie-detail {
@@ -285,4 +328,18 @@ header input:focus {
   cursor: pointer;
   font-size: 16px;
   transition: background-color 0.3s ease;
+}
+
+.remove-btn {
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+  position: absolute;
+  top: 40%;
+  right: 10px;
 }

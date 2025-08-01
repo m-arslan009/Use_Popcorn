@@ -9,12 +9,18 @@ export default function DisplayMovies({
   isError,
   isFound,
 }) {
+  function handleMovieClick(movie) {
+    document.title = `🍿 | ${movie.Title}`;
+    dispatch({ type: "SET_SELECTED_MOVIE", payload: movie });
+  }
   const moviesList = Movies?.map((movie) => {
     return (
       <MovieComponent
         key={movie.imdbID}
         movie={movie}
-        onClick={() => dispatch({ type: "SET_SELECTED_MOVIE", payload: movie })}
+        onClick={() => {
+          handleMovieClick(movie);
+        }}
       />
     );
   });

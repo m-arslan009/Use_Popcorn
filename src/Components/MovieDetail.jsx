@@ -3,31 +3,38 @@ import Rating from "./Rating";
 
 export default function MovieDetail({ selectedMovie, dispatch }) {
   const [rating, setRating] = useState(0);
-  const [movie, setMovie] = useState(selectedMovie || {});
 
   function handleRatingChange(newRating) {
     setRating(newRating);
   }
 
   function handleAddMovie() {
-    setMovie((prev) => ({ ...prev, rating: rating }));
-    localStorage.setItem(
-      "watchedHistory",
-      JSON.stringify([
-        ...JSON.parse(localStorage.getItem("watchedHistory") || []),
-        movie,
-      ])
-    );
-    dispatch({ type: "ADD_TO_WATCHED_HISTORY", payload: movie });
+    document.title = `🍿 USEPOPCORN`;
+    if (rating === 0) {
+      alert("Please rate the movie before adding to your watched history!");
+      return;
+    }
+
+    const movieWithRating = {
+      ...selectedMovie,
+      userRating: rating,
+      watchedDate: new Date().toISOString(),
+      id: selectedMovie.imdbID || selectedMovie.id || Date.now().toString(),
+    };
+
+    alert("Movie added to watched history!");
+    dispatch({ type: "ADD_TO_WATCHED_HISTORY", payload: movieWithRating });
+  }
+
+  function handleBack() {
+    document.title = `🍿 USEPOPCORN`;
+    dispatch({ type: "BACK_TO_HISTORY" });
   }
 
   return (
     <>
       <div className="movie-detail">
-        <button
-          className="back-btn"
-          onClick={() => dispatch({ type: "BACK_TO_HISTORY" })}
-        >{`⬅`}</button>
+        <button className="back-btn" onClick={handleBack}>{`⬅`}</button>
         <img
           src={
             selectedMovie.Poster !== "N/A" &&
